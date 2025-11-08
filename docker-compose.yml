@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=proposta_db
+      - DB_USERNAME=user
+      - DB_PASSWORD=secret
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: proposta_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  node:
+    image: node:20
+    container_name: vue_front
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
+
+volumes:
+  db_data:
