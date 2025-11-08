@@ -15,6 +15,374 @@
         }
     ],
     "paths": {
-        "/": {}
-    }
+        "/": {},
+        "/api/propostas": {
+            "get": {
+                "tags": [
+                    "Propostas"
+                ],
+                "summary": "Listar todas as propostas",
+                "description": "Retorna uma lista de propostas com filtros opcionais por status e nome/CPF.",
+                "operationId": "b8c8ece26a54c07823ea4fa515ebd8ae",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Buscar por nome ou CPF",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Maria Silva"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "rascunho",
+                                "em_analise",
+                                "aprovada",
+                                "reprovada",
+                                "cancelada"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de propostas retornada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Propostas carregadas com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Proposta"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/propostas/{id}": {
+            "get": {
+                "tags": [
+                    "Propostas"
+                ],
+                "summary": "Exibir uma proposta específica",
+                "operationId": "50b31764ab5c89b1d02a5b92aeeb89ad",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da proposta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Proposta encontrada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Proposta"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Proposta não encontrada."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Propostas"
+                ],
+                "summary": "Excluir uma proposta",
+                "operationId": "74f59ad4081fbaa14dc399c624204676",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da proposta a ser excluída",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Proposta removida com sucesso."
+                    },
+                    "404": {
+                        "description": "Proposta não encontrada."
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Propostas"
+                ],
+                "summary": "Atualizar uma proposta existente",
+                "operationId": "40cb1c23e7103c673528142fcf251b88",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da proposta a ser atualizada",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "valor_solicitado": {
+                                        "type": "number",
+                                        "example": 3500
+                                    },
+                                    "prazo_meses": {
+                                        "type": "integer",
+                                        "example": 36
+                                    },
+                                    "observacoes": {
+                                        "type": "string",
+                                        "example": "Alteração de prazo solicitada."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Proposta atualizada com sucesso."
+                    },
+                    "404": {
+                        "description": "Proposta não encontrada."
+                    }
+                }
+            }
+        },
+        "/api/propostas/create": {
+            "post": {
+                "tags": [
+                    "Propostas"
+                ],
+                "summary": "Criar uma nova proposta",
+                "operationId": "84f897902a40f8dfc02da56d27231ea4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cliente_nome",
+                                    "cliente_cpf",
+                                    "cliente_salario",
+                                    "valor_solicitado",
+                                    "prazo_meses"
+                                ],
+                                "properties": {
+                                    "cliente_nome": {
+                                        "type": "string",
+                                        "example": "Maria da Silva"
+                                    },
+                                    "cliente_cpf": {
+                                        "type": "string",
+                                        "example": "12345678900"
+                                    },
+                                    "cliente_salario": {
+                                        "type": "number",
+                                        "example": 5000
+                                    },
+                                    "valor_solicitado": {
+                                        "type": "number",
+                                        "example": 2000
+                                    },
+                                    "prazo_meses": {
+                                        "type": "integer",
+                                        "example": 24
+                                    },
+                                    "observacoes": {
+                                        "type": "string",
+                                        "example": "Cliente deseja crédito pessoal."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Proposta criada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Proposta"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados inválidos."
+                    }
+                }
+            }
+        },
+        "/api/propostas/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Propostas"
+                ],
+                "summary": "Atualizar o status da proposta",
+                "operationId": "6429df1f04bfee82bfb4f699aa93ef16",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da proposta a ser atualizada",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "aprovada"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status atualizado com sucesso."
+                    },
+                    "422": {
+                        "description": "Status inválido."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Proposta": {
+                "title": "Proposta",
+                "required": [
+                    "cliente_nome",
+                    "cliente_cpf",
+                    "valor_solicitado"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "cliente_nome": {
+                        "type": "string",
+                        "example": "Maria da Silva"
+                    },
+                    "cliente_cpf": {
+                        "type": "string",
+                        "example": "12345678900"
+                    },
+                    "cliente_salario": {
+                        "type": "number",
+                        "example": 5000
+                    },
+                    "valor_solicitado": {
+                        "type": "number",
+                        "example": 2000
+                    },
+                    "prazo_meses": {
+                        "type": "integer",
+                        "example": 24
+                    },
+                    "taxa_juros": {
+                        "type": "number",
+                        "example": 2.5
+                    },
+                    "valor_parcela": {
+                        "type": "number",
+                        "example": 150
+                    },
+                    "valor_total": {
+                        "type": "number",
+                        "example": 3600
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "em_analise"
+                    },
+                    "observacoes": {
+                        "type": "string",
+                        "example": "Cliente com bom histórico de crédito."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2025-11-08 14:00:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2025-11-08 14:30:00"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Propostas",
+            "description": "Endpoints para gestão de propostas de crédito"
+        }
+    ]
 }

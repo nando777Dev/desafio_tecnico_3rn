@@ -1,98 +1,80 @@
 <template>
-  <div class="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow-md">
-    <h1 class="text-2xl font-semibold mb-6 text-gray-800">📝 Nova Proposta</h1>
+  <div class="bg-gray-100 min-h-screen p-6 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8">
+      <i class="fa-solid fa-pen-to-square text-yellow-500"></i>
+      <h1 class="text-2xl font-bold mb-6 text-gray-800 text-center"> Nova Proposta de Crédito</h1>
 
-    <form @submit.prevent="abrirConfirmacao">
-      <!-- Nome -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Nome completo</label>
-        <input v-model="form.cliente_nome" type="text" class="input" required />
-      </div>
+      <form @submit.prevent="abrirConfirmacao" class="space-y-5">
 
-      <!-- CPF -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">CPF</label>
-        <input
-          v-model="form.cliente_cpf"
-          type="text"
-          class="input"
-          maxlength="14"
-          @input="form.cliente_cpf = formatarCPF(form.cliente_cpf)"
-          required
-        />
-      </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700">Nome completo</label>
+          <input v-model="form.cliente_nome" type="text" class="input" required />
+        </div>
 
-      <!-- Salário -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Salário</label>
-        <input
-          v-model="form.cliente_salario"
-          type="text"
-          class="input"
-          @input="form.cliente_salario = formatarMoeda(form.cliente_salario)"
-          required
-        />
-      </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700">CPF</label>
+          <input v-model="form.cliente_cpf" @input="formatarCPF" maxlength="14" class="input" required />
+        </div>
 
-      <!-- Valor solicitado -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Valor solicitado</label>
-        <input
-          v-model="form.valor_solicitado"
-          type="text"
-          class="input"
-          @input="form.valor_solicitado = formatarMoeda(form.valor_solicitado)"
-          required
-        />
-      </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700">Salário</label>
+          <input v-model="form.cliente_salario" @input="formatarMoeda('cliente_salario')" class="input" required />
+        </div>
 
-      <!-- Prazo -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Prazo (meses)</label>
-        <select v-model="form.prazo_meses" class="input" required>
-          <option disabled value="">Selecione...</option>
-          <option v-for="p in prazos" :key="p" :value="p">{{ p }} meses</option>
-        </select>
-      </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700">Valor solicitado</label>
+          <input v-model="form.valor_solicitado" @input="formatarMoeda('valor_solicitado')" class="input" required />
+        </div>
 
-      <!-- Observações -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Observações</label>
-        <textarea
-          v-model="form.observacoes"
-          rows="3"
-          class="input"
-          placeholder="Comentários opcionais..."
-        ></textarea>
-      </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700">Prazo (meses)</label>
+          <select v-model="form.prazo_meses" class="input" required>
+            <option value="">Selecione</option>
+            <option v-for="prazo in prazos" :key="prazo" :value="prazo">{{ prazo }}</option>
+          </select>
+        </div>
 
-      <!-- Cálculos -->
-      <div class="bg-gray-50 p-4 rounded-md text-sm text-gray-700 space-y-1 mb-6">
-        <p><strong>Margem disponível:</strong> {{ margemFormatada }}</p>
-        <p><strong>Valor da parcela:</strong> {{ parcelaFormatada }}</p>
-        <p><strong>Valor total a pagar:</strong> {{ totalFormatado }}</p>
-      </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700">Observações</label>
+          <textarea v-model="form.observacoes" rows="3" class="input"></textarea>
+        </div>
 
-      <!-- Botões -->
-      <div class="flex justify-end gap-3">
-        <router-link to="/propostas" class="btn-secondary">Cancelar</router-link>
-        <button type="submit" class="btn-primary" :disabled="salvando">
-          <span v-if="salvando">💾 Salvando...</span>
-          <span v-else>✅ Salvar Proposta</span>
-        </button>
-      </div>
-    </form>
+        <div class="bg-gray-50 p-4 rounded-lg border mt-4">
+          <p><strong>Margem disponível:</strong> R$ {{ formatarNumero(margemDisponivel) }}</p>
+          <p><strong>Valor da parcela:</strong> R$ {{ formatarNumero(valorParcela) }}</p>
+          <p><strong>Valor total a pagar:</strong> R$ {{ formatarNumero(valorTotal) }}</p>
+        </div>
 
-    <!-- Modal de Confirmação -->
-    <div v-if="mostrarConfirmacao" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div class="bg-white p-6 rounded-lg shadow-xl w-80 text-center">
-        <h2 class="text-lg font-semibold mb-3 text-gray-800">Confirmar envio</h2>
-        <p class="text-gray-600 mb-5">Deseja realmente salvar esta proposta?</p>
-        <div class="flex justify-center gap-4">
-          <button @click="confirmarSalvar" class="btn-primary">Sim</button>
-          <button @click="mostrarConfirmacao = false" class="btn-secondary">Cancelar</button>
+        <div class="flex justify-end gap-3 mt-6">
+          <router-link to="/propostas" class="btn-secondary">Voltar</router-link>
+          <button type="submit" class="btn-primary" :disabled="salvando">
+            <span v-if="salvando">Salvando...</span>
+            <span v-else>Salvar Proposta</span>
+          </button>
+        </div>
+      </form>
+
+      <div v-if="mostrarConfirmacao" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 shadow-lg w-full max-w-sm text-center animate-fadeIn">
+          <h2 class="text-lg font-semibold text-gray-800 mb-2">Confirmar ação</h2>
+          <p class="text-gray-600 mb-4">Deseja realmente salvar esta proposta?</p>
+
+          <div class="flex justify-center gap-3">
+            <button @click="mostrarConfirmacao = false" class="btn-secondary w-24">Cancelar</button>
+            <button @click="confirmarSalvar" class="btn-primary w-24">Salvar</button>
+          </div>
         </div>
       </div>
+
+      <p
+        v-if="mensagem"
+        :class="[
+          'mt-4 text-center font-semibold',
+          mensagemTipo === 'erro' ? 'text-red-500' : 'text-green-600'
+        ]"
+      >
+        {{ mensagem }}
+      </p>
     </div>
   </div>
 </template>
@@ -101,9 +83,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import propostasApi from '@/api/propostas'
-import useMask from '@/composables/useMasks'
 
-const { formatarCPF, formatarMoeda, limparMoeda } = useMask()
 const router = useRouter()
 
 const form = ref({
@@ -121,33 +101,47 @@ const salvando = ref(false)
 const mostrarConfirmacao = ref(false)
 const prazos = [6, 12, 18, 24, 36, 48, 60]
 
-/* === CÁLCULOS === */
-const salarioNumerico = computed(() => limparMoeda(form.value.cliente_salario))
-const valorSolicitadoNumerico = computed(() => limparMoeda(form.value.valor_solicitado))
+
+const formatarCPF = () => {
+  let v = form.value.cliente_cpf.replace(/\D/g, '')
+  v = v.replace(/(\d{3})(\d)/, '$1.$2')
+  v = v.replace(/(\d{3})(\d)/, '$1.$2')
+  v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+  form.value.cliente_cpf = v
+}
+
+const formatarMoeda = (campo) => {
+  let v = form.value[campo].replace(/\D/g, '')
+  v = (v / 100).toFixed(2) + ''
+  v = v.replace('.', ',')
+  v = v.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  form.value[campo] = 'R$ ' + v
+}
+
+
+const salarioNumerico = computed(() => parseFloat(form.value.cliente_salario.replace(/[^\d,]/g, '').replace(',', '.')) || 0)
+const valorSolicitadoNumerico = computed(() => parseFloat(form.value.valor_solicitado.replace(/[^\d,]/g, '').replace(',', '.')) || 0)
 const margemDisponivel = computed(() => salarioNumerico.value * 0.3)
 const valorParcela = computed(() => {
   const taxa = 0.025
   const n = Number(form.value.prazo_meses)
-  const pv = valorSolicitadoNumerico.value
-  if (!n || pv === 0) return 0
-  return pv * (taxa * Math.pow(1 + taxa, n)) / (Math.pow(1 + taxa, n) - 1)
+  if (!n || valorSolicitadoNumerico.value === 0) return 0
+  return valorSolicitadoNumerico.value * (taxa * Math.pow(1 + taxa, n)) / (Math.pow(1 + taxa, n) - 1)
 })
 const valorTotal = computed(() => valorParcela.value * Number(form.value.prazo_meses || 0))
-
-const formatarBRL = (v) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
-
-const margemFormatada = computed(() => formatarBRL(margemDisponivel.value))
-const parcelaFormatada = computed(() => formatarBRL(valorParcela.value))
-const totalFormatado = computed(() => formatarBRL(valorTotal.value))
+const formatarNumero = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
 
 
-const abrirConfirmacao = () => (mostrarConfirmacao.value = true)
+const abrirConfirmacao = () => {
+  mostrarConfirmacao.value = true
+}
+
 const confirmarSalvar = async () => {
   mostrarConfirmacao.value = false
   await salvarProposta()
 }
 
+/* === SALVAR === */
 const salvarProposta = async () => {
   mensagem.value = ''
   mensagemTipo.value = ''
@@ -161,14 +155,11 @@ const salvarProposta = async () => {
       valor_solicitado: valorSolicitadoNumerico.value,
       prazo_meses: form.value.prazo_meses,
       observacoes: form.value.observacoes,
-      valor_parcela: valorParcela.value,
-      valor_total: valorTotal.value,
-      margem_disponivel: margemDisponivel.value,
     }
 
     const res = await propostasApi.create(payload)
     if (res.data.success) {
-      mensagem.value = 'Proposta criada com sucesso!'
+      mensagem.value = '✅ Proposta criada com sucesso!'
       mensagemTipo.value = 'sucesso'
       setTimeout(() => router.push('/propostas'), 1000)
     } else {
@@ -186,14 +177,19 @@ const salvarProposta = async () => {
 
 <style scoped>
 .input {
-  @apply border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition;
 }
-
 .btn-primary {
   @apply bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition;
 }
-
 .btn-secondary {
   @apply bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
 }
 </style>

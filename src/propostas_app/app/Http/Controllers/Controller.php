@@ -11,15 +11,14 @@ namespace App\Http\Controllers;
  *         email="suporte@3rncredito.com"
  *     )
  * ),
- * 
+ *
  * @OA\Server(
  *     url="http://propostas_app.localhost/api",
  *     description="Servidor local"
  * )
- * 
+ *
  * @OA\PathItem(path="/")
  */
-
 abstract class Controller
 {
     //

@@ -4,13 +4,17 @@ namespace App\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Facades\DB;
 
 class ValidCpf implements ValidationRule
 {
     /**
-     * Run the validation rule.
+     * Executa a validação do CPF.
      *
-     * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+     * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -30,6 +34,11 @@ class ValidCpf implements ValidationRule
                 $fail('O CPF informado é inválido.');
                 return;
             }
+        }
+
+        $existe = DB::table('propostas')->where('cliente_cpf', $cpf)->exists();
+        if ($existe) {
+            $fail('O CPF informado já está cadastrado.');
         }
     }
 }
