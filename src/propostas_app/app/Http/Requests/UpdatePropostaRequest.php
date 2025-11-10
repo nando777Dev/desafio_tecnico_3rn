@@ -21,8 +21,16 @@ class UpdatePropostaRequest extends FormRequest
      */
     public function rules()
     {
-        // Usado para PATCH - atualizações parciais (status/observacoes)
         return [
+            'cliente_nome' => 'sometimes|string|max:255',
+            'cliente_cpf' => 'sometimes|string|max:14',
+            'cliente_salario' => 'sometimes|numeric|min:0',
+            'valor_solicitado' => 'sometimes|numeric|min:0',
+            'prazo_meses' => 'sometimes|integer|min:1',
+            'taxa_juros' => 'sometimes|numeric|min:0',
+            'valor_parcela' => 'sometimes|numeric|min:0',
+            'valor_total' => 'sometimes|numeric|min:0',
+            'margem_disponivel' => 'sometimes|numeric|min:0',
             'status' => 'sometimes|string|in:rascunho,em_analise,aprovada,reprovada,cancelada',
             'observacoes' => 'nullable|string',
         ];

@@ -70,7 +70,61 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/Proposta"
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "cliente_nome": {
+                                                        "type": "string",
+                                                        "example": "Maria da Silva"
+                                                    },
+                                                    "cliente_cpf": {
+                                                        "type": "string",
+                                                        "example": "12345678900"
+                                                    },
+                                                    "cliente_salario": {
+                                                        "type": "number",
+                                                        "example": 5000
+                                                    },
+                                                    "valor_solicitado": {
+                                                        "type": "number",
+                                                        "example": 2000
+                                                    },
+                                                    "prazo_meses": {
+                                                        "type": "integer",
+                                                        "example": 24
+                                                    },
+                                                    "taxa_juros": {
+                                                        "type": "number",
+                                                        "example": 2.5
+                                                    },
+                                                    "valor_parcela": {
+                                                        "type": "number",
+                                                        "example": 150
+                                                    },
+                                                    "valor_total": {
+                                                        "type": "number",
+                                                        "example": 3600
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "em_analise"
+                                                    },
+                                                    "observacoes": {
+                                                        "type": "string",
+                                                        "example": "Cliente com bom histórico de crédito."
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2025-11-08 14:00:00"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2025-11-08 14:30:00"
+                                                    }
+                                                },
+                                                "type": "object"
                                             }
                                         }
                                     },
@@ -88,6 +142,7 @@
                     "Propostas"
                 ],
                 "summary": "Exibir uma proposta específica",
+                "description": "Retorna os detalhes de uma proposta específica pelo ID.",
                 "operationId": "50b31764ab5c89b1d02a5b92aeeb89ad",
                 "parameters": [
                     {
@@ -107,13 +162,97 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Proposta"
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta encontrada com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "cliente_nome": {
+                                                    "type": "string",
+                                                    "example": "Maria da Silva"
+                                                },
+                                                "cliente_cpf": {
+                                                    "type": "string",
+                                                    "example": "12345678900"
+                                                },
+                                                "cliente_salario": {
+                                                    "type": "number",
+                                                    "example": 5000
+                                                },
+                                                "valor_solicitado": {
+                                                    "type": "number",
+                                                    "example": 2000
+                                                },
+                                                "prazo_meses": {
+                                                    "type": "integer",
+                                                    "example": 24
+                                                },
+                                                "taxa_juros": {
+                                                    "type": "number",
+                                                    "example": 2.5
+                                                },
+                                                "valor_parcela": {
+                                                    "type": "number",
+                                                    "example": 150
+                                                },
+                                                "valor_total": {
+                                                    "type": "number",
+                                                    "example": 3600
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "em_analise"
+                                                },
+                                                "observacoes": {
+                                                    "type": "string",
+                                                    "example": "Cliente com bom histórico de crédito."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-08 14:00:00"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-08 14:30:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Proposta não encontrada."
+                        "description": "Proposta não encontrada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta não encontrada."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -149,6 +288,7 @@
                     "Propostas"
                 ],
                 "summary": "Atualizar uma proposta existente",
+                "description": "Atualiza os dados de uma proposta existente com base no ID informado.",
                 "operationId": "40cb1c23e7103c673528142fcf251b88",
                 "parameters": [
                     {
@@ -163,6 +303,7 @@
                     }
                 ],
                 "requestBody": {
+                    "description": "Campos que podem ser atualizados na proposta",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -188,10 +329,101 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Proposta atualizada com sucesso."
+                        "description": "Proposta atualizada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta atualizada com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "cliente_nome": {
+                                                    "type": "string",
+                                                    "example": "Maria da Silva"
+                                                },
+                                                "cliente_cpf": {
+                                                    "type": "string",
+                                                    "example": "12345678900"
+                                                },
+                                                "cliente_salario": {
+                                                    "type": "number",
+                                                    "example": 5000
+                                                },
+                                                "valor_solicitado": {
+                                                    "type": "number",
+                                                    "example": 3500
+                                                },
+                                                "prazo_meses": {
+                                                    "type": "integer",
+                                                    "example": 36
+                                                },
+                                                "taxa_juros": {
+                                                    "type": "number",
+                                                    "example": 2.5
+                                                },
+                                                "valor_parcela": {
+                                                    "type": "number",
+                                                    "example": 180
+                                                },
+                                                "valor_total": {
+                                                    "type": "number",
+                                                    "example": 6480
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "em_analise"
+                                                },
+                                                "observacoes": {
+                                                    "type": "string",
+                                                    "example": "Alteração de prazo solicitada."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-08 14:00:00"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-10 10:30:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Proposta não encontrada."
+                        "description": "Proposta não encontrada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta não encontrada."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -202,8 +434,10 @@
                     "Propostas"
                 ],
                 "summary": "Criar uma nova proposta",
+                "description": "Cria uma nova proposta de crédito com os dados informados.",
                 "operationId": "84f897902a40f8dfc02da56d27231ea4",
                 "requestBody": {
+                    "description": "Dados necessários para criar uma proposta",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -252,13 +486,109 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Proposta"
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta criada com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "cliente_nome": {
+                                                    "type": "string",
+                                                    "example": "Maria da Silva"
+                                                },
+                                                "cliente_cpf": {
+                                                    "type": "string",
+                                                    "example": "12345678900"
+                                                },
+                                                "cliente_salario": {
+                                                    "type": "number",
+                                                    "example": 5000
+                                                },
+                                                "valor_solicitado": {
+                                                    "type": "number",
+                                                    "example": 2000
+                                                },
+                                                "prazo_meses": {
+                                                    "type": "integer",
+                                                    "example": 24
+                                                },
+                                                "taxa_juros": {
+                                                    "type": "number",
+                                                    "example": 2.5
+                                                },
+                                                "valor_parcela": {
+                                                    "type": "number",
+                                                    "example": 150
+                                                },
+                                                "valor_total": {
+                                                    "type": "number",
+                                                    "example": 3600
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "em_analise"
+                                                },
+                                                "observacoes": {
+                                                    "type": "string",
+                                                    "example": "Cliente deseja crédito pessoal."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-08 14:00:00"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-08 14:30:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
                     },
                     "422": {
-                        "description": "Dados inválidos."
+                        "description": "Erro de validação nos dados enviados.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Os dados fornecidos são inválidos."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "cliente_cpf": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo CPF é obrigatório."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -268,7 +598,8 @@
                 "tags": [
                     "Propostas"
                 ],
-                "summary": "Atualizar o status da proposta",
+                "summary": "Atualizar uma proposta existente",
+                "description": "Atualiza os dados de uma proposta existente com base no ID informado.",
                 "operationId": "6429df1f04bfee82bfb4f699aa93ef16",
                 "parameters": [
                     {
@@ -283,17 +614,23 @@
                     }
                 ],
                 "requestBody": {
+                    "description": "Campos que podem ser atualizados na proposta",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "status"
-                                ],
                                 "properties": {
-                                    "status": {
+                                    "valor_solicitado": {
+                                        "type": "number",
+                                        "example": 3500
+                                    },
+                                    "prazo_meses": {
+                                        "type": "integer",
+                                        "example": 36
+                                    },
+                                    "observacoes": {
                                         "type": "string",
-                                        "example": "aprovada"
+                                        "example": "Alteração de prazo solicitada."
                                     }
                                 },
                                 "type": "object"
@@ -303,79 +640,103 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Status atualizado com sucesso."
+                        "description": "Proposta atualizada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta atualizada com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "cliente_nome": {
+                                                    "type": "string",
+                                                    "example": "Maria da Silva"
+                                                },
+                                                "cliente_cpf": {
+                                                    "type": "string",
+                                                    "example": "12345678900"
+                                                },
+                                                "cliente_salario": {
+                                                    "type": "number",
+                                                    "example": 5000
+                                                },
+                                                "valor_solicitado": {
+                                                    "type": "number",
+                                                    "example": 3500
+                                                },
+                                                "prazo_meses": {
+                                                    "type": "integer",
+                                                    "example": 36
+                                                },
+                                                "taxa_juros": {
+                                                    "type": "number",
+                                                    "example": 2.5
+                                                },
+                                                "valor_parcela": {
+                                                    "type": "number",
+                                                    "example": 180
+                                                },
+                                                "valor_total": {
+                                                    "type": "number",
+                                                    "example": 6480
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "em_analise"
+                                                },
+                                                "observacoes": {
+                                                    "type": "string",
+                                                    "example": "Alteração de prazo solicitada."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-08 14:00:00"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2025-11-10 10:30:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Status inválido."
+                    "404": {
+                        "description": "Proposta não encontrada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Proposta não encontrada."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        }
-    },
-    "components": {
-        "schemas": {
-            "Proposta": {
-                "title": "Proposta",
-                "required": [
-                    "cliente_nome",
-                    "cliente_cpf",
-                    "valor_solicitado"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "cliente_nome": {
-                        "type": "string",
-                        "example": "Maria da Silva"
-                    },
-                    "cliente_cpf": {
-                        "type": "string",
-                        "example": "12345678900"
-                    },
-                    "cliente_salario": {
-                        "type": "number",
-                        "example": 5000
-                    },
-                    "valor_solicitado": {
-                        "type": "number",
-                        "example": 2000
-                    },
-                    "prazo_meses": {
-                        "type": "integer",
-                        "example": 24
-                    },
-                    "taxa_juros": {
-                        "type": "number",
-                        "example": 2.5
-                    },
-                    "valor_parcela": {
-                        "type": "number",
-                        "example": 150
-                    },
-                    "valor_total": {
-                        "type": "number",
-                        "example": 3600
-                    },
-                    "status": {
-                        "type": "string",
-                        "example": "em_analise"
-                    },
-                    "observacoes": {
-                        "type": "string",
-                        "example": "Cliente com bom histórico de crédito."
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2025-11-08 14:00:00"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "example": "2025-11-08 14:30:00"
-                    }
-                },
-                "type": "object"
             }
         }
     },
