@@ -28,6 +28,9 @@ class StorePropostaRequest extends FormRequest
             'cliente_salario' => 'required|numeric|min:1500',
             'valor_solicitado' => 'required|numeric|min:1000|max:50000',
             'prazo_meses' => 'required|integer|min:6|max:60',
+            'valor_parcela' => 'required|numeric',
+            'valor_total' => 'required|numeric',
+            'margem_disponivel'=>'required|numeric',
             'observacoes' => 'nullable|string',
         ];
     }

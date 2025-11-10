@@ -7,6 +7,7 @@ use App\Http\Requests\StorePropostaRequest;
 use App\Http\Requests\UpdatePropostaRequest;
 use App\Http\Resources\PropostaResource;
 use App\Repositories\PropostaRepository;
+use App\Services\PropostaService;
 use Illuminate\Http\Request;
 
 /**
@@ -19,9 +20,11 @@ class PropostasController extends Controller
 {
     protected $repo;
 
-    public function __construct(PropostaRepository $repo)
+    protected  $service;
+
+    public function __construct(PropostaService $service)
     {
-        $this->repo = $repo;
+        $this->repo = $service;
     }
 
     /**
@@ -211,6 +214,7 @@ class PropostasController extends Controller
 
     public function store(StorePropostaRequest $request)
     {
+
         $nova = $this->repo->create($request->validated());
 
         return (new PropostaResource($nova))

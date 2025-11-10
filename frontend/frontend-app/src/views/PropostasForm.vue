@@ -155,11 +155,15 @@ const salvarProposta = async () => {
       valor_solicitado: valorSolicitadoNumerico.value,
       prazo_meses: form.value.prazo_meses,
       observacoes: form.value.observacoes,
+
+      margem_disponivel: margemDisponivel.value,
+      valor_total: valorTotal.value,
+      valor_parcela: valorParcela.value,
     }
 
     const res = await propostasApi.create(payload)
     if (res.data.success) {
-      mensagem.value = '✅ Proposta criada com sucesso!'
+      mensagem.value = 'Proposta criada com sucesso!'
       mensagemTipo.value = 'sucesso'
       setTimeout(() => router.push('/propostas'), 1000)
     } else {

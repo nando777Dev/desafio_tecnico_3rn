@@ -26,7 +26,7 @@ class UpdatePropostaRequest extends FormRequest
             'cliente_cpf' => 'sometimes|string|max:14',
             'cliente_salario' => 'sometimes|numeric|min:0',
             'valor_solicitado' => 'sometimes|numeric|min:0',
-            'prazo_meses' => 'sometimes|integer|min:1',
+            'prazo_meses' => 'sometimes|integer|min:1|max:48'  ,
             'taxa_juros' => 'sometimes|numeric|min:0',
             'valor_parcela' => 'sometimes|numeric|min:0',
             'valor_total' => 'sometimes|numeric|min:0',
